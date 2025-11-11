@@ -590,8 +590,7 @@
 
 // export default Testimonial;
 
-
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ethanImage from "../assets/Ethan.svg";
 import wmdImage from "../assets/wm-wedasinghe.jpg";

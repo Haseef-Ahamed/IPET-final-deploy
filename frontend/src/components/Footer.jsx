@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
-
+import React from 'react';
 import footer_logo from "../assets/Footer_logo.svg";
 import telephone from "../assets/Telephone.svg";
 import location from "../assets/Location.svg";

@@ -19,6 +19,7 @@ pipeline {
             steps {
                 dir("${WORKDIR}") {
                     sh 'npm ci'
+                    echo "Dependencies installed successfully"
                 }
             }
         }
@@ -27,6 +28,7 @@ pipeline {
             steps {
                 dir("${WORKDIR}") {
                     sh 'npm run lint || echo "Linting issues found"'
+                    echo "Linting completed"
                 }
             }
         }

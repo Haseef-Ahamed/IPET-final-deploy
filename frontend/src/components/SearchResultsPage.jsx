@@ -11,9 +11,8 @@
 // import graduates from "../assets/Graduates.svg";
 // import worker from "../assets/Worker.svg";
 // import ViewCourses from "../pages/ViewCourses";
-
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 // const SearchResultsPage = () => {
