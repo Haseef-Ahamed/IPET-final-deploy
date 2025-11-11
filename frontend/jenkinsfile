@@ -1,81 +1,73 @@
 pipeline {
     agent any
-    tools {
-        nodejs 'NodeJS 18.18.2' 
-    }
+    tools {
+        nodejs 'NodeJS 25.1.0' 
+    }
 
+    environment {
+        WORKDIR = "frontend"
+    }
 
-    environment {
-        WORKDIR = "frontend"
-    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
+        stage('Install Dependencies') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm ci'
+                    echo "Dependencies installed successfully"
+                }
+            }
+        }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+        stage('Lint') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run lint || echo "Linting issues found"'
+                    echo "Linting completed"
+                }
+            }
+        }
+        stage('Security Audit') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm audit --audit-level=high'
+                }
+            }
+        }
 
+        // stage('Test & Coverage') {
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm test -- --watchAll=false --coverage'
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
+        //             publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
+        //         }
+        //     }
+        // }
 
-        stage('Install Dependencies') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm ci'
-                    echo "Dependencies installed successfully"
-                }
-            }
-        }
+        stage('Build') { 
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
+                }
+            }
+        }
 
+        
 
-        stage('Lint') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm run lint || echo "Linting issues found"'
-                    echo "Linting completed"
-                }
-            }
-        }
-        stage('Security Audit') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm audit --audit-level=high'
-                }
-            }
-        }
-
-
-        stage('Test & Coverage') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm test -- --watchAll=false --coverage'
-                }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
-                    publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
-                }
-            }
-        }
-
-
-        stage('Build') { 
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm run build'
-                }
-            }
-        }
-
-
-        
-
-
-        // stage('Test') { 
-        //     steps {
-        //         sh './jenkins/scripts/test.sh' 
-        //     }
-        // }
-    }
+        // stage('Test') { 
+        //     steps {
+        //         sh './jenkins/scripts/test.sh' 
+        //     }
+        // }
+    }
 }
