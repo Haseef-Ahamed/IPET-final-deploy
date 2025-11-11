@@ -26,4 +26,11 @@ if (typeof window !== 'undefined') {
       takeRecords() { return []; }
     };
   }
+
+  if (!window.scrollTo) {
+    window.scrollTo = () => {};
+  }
+  if (!document.documentElement.scrollTo) {
+    document.documentElement.scrollTo = () => {};
+  }
 }
