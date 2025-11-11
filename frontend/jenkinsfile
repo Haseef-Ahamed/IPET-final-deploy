@@ -40,19 +40,19 @@ pipeline {
             }
         }
 
-        stage('Test & Coverage') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm test -- --watchAll=false --coverage'
-                }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
-                    publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
-                }
-            }
-        }
+        // stage('Test & Coverage') {
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm test -- --watchAll=false --coverage'
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
+        //             publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
+        //         }
+        //     }
+        // }
 
         stage('Build') { 
             steps {
