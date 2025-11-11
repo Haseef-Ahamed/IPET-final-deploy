@@ -54,14 +54,6 @@ pipeline {
         //     }
         // }
 
-        stage('Build') { 
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm run build'
-                }
-            }
-        }
-    
         stage('Test') { 
             steps {
                 dir("${WORKDIR}") {
@@ -69,5 +61,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Build') { 
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "${WORKDIR}/dist/**", onlyIfSuccessful: true
+                }
+            }
+        }
+    
+        
     }
 }
