@@ -61,14 +61,13 @@ pipeline {
                 }
             }
         }
-
-        
-
+    
         stage('Test') { 
             steps {
                 dir("${WORKDIR}") {
                     sh 'npm test'
                 }
             }
+        }
     }
 }
