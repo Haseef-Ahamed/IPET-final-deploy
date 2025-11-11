@@ -1,6 +1,6 @@
 pipeline {
     tools {
-        nodejs "Node 18" 
+        nodejs 'Node 18' 
     }
 
     agent any
