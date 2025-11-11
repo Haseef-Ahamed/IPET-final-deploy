@@ -3,7 +3,7 @@
 import React from 'react';
 import footer_logo from "../assets/Footer_logo.svg";
 import telephone from "../assets/Telephone.svg";
-import Location from "../assets/Location.svg";
+import location from "../assets/Location.svg";
 import mail from "../assets/Mail.svg";
 import fb from "../assets/Footer_fb.svg";
 import linkedIn from "../assets/Footer_linkedIn.svg";
@@ -26,7 +26,7 @@ const Footer = () => {
               <div className="w-px h-24 bg-[#BFC2D6] opacity-50"></div>
 
               <div className="flex flex-col items-center flex-1 min-w-[150px] space-y-4 transition-transform duration-300 hover:scale-105">
-                <img src={Location} alt="Location" className="w-8 h-8 md:h-10 md:w-10" />
+                <img src={location} alt="Location" className="w-8 h-8 md:h-10 md:w-10" />
                 <span className="text-sm md:text-lg font-semibold text-center">
                   No 60, Weediyawatta, Yakkala.
                 </span>
