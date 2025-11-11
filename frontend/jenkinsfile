@@ -1,14 +1,23 @@
 pipeline {
+    agent any
     tools {
         nodejs 'NodeJS 18.18.2' 
     }
 
-    agent any
+    environment {
+        WORKDIR = "frontend"
+    }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                dir('frontend') {
+                dir("${WORKDIR}") {
                     sh 'npm ci'
                 }
             }
@@ -16,17 +25,37 @@ pipeline {
 
         stage('Lint') {
             steps {
-                dir('frontend') {
+                dir("${WORKDIR}") {
                     sh 'npm run lint || echo "Linting issues found"'
+                }
+            }
+        }
+        stage('Security Audit') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm audit --audit-level=high'
+                }
+            }
+        }
+
+        stage('Test & Coverage') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm test -- --watchAll=false --coverage'
+                }
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
+                    publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
                 }
             }
         }
 
         stage('Build') { 
             steps {
-                dir('frontend') {
-                     sh 'npm install'
-                    //  sh 'npm run build'
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
                 }
             }
         }
