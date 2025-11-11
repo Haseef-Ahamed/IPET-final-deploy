@@ -1,12 +1,18 @@
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-};
-if (!window.scrollTo) {
-  window.scrollTo = () => {};
-}
-if (!document.documentElement.scrollTo) {
-  document.documentElement.scrollTo = () => {};
+if (typeof window !== 'undefined') {
+  if (!window.localStorage) {
+    window.localStorage = {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+      clear: () => {},
+    };
+  }
+  if (!window.sessionStorage) {
+    window.sessionStorage = {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+      clear: () => {},
+    };
+  }
 }
