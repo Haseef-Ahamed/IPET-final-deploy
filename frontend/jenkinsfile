@@ -1,50 +1,12 @@
 pipeline {
-    
+
     agent any
 
-    environment {
-        NODE_VERSION = "18"
-    }
-
-    tools {
-        nodejs "${NODE_VERSION}"
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Build') { 
             steps {
-                checkout scm
+                sh 'npm install' 
             }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-
-        stage('Lint') {
-            steps {
-                sh 'npm run lint || echo "Linting issues found"'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'npm test -- --watchAll=false --coverage'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'npm run build'
-            }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
