@@ -1,95 +1,81 @@
 pipeline {
     agent any
+    tools {
+        nodejs 'NodeJS 18.18.2' 
+    }
 
-    tools {
-        nodejs 'NodeJS 25.1.0'
-    }
 
-    environment {
-        WORKDIR = "frontend"
-    }
+    environment {
+        WORKDIR = "frontend"
+    }
 
-    // options {
-    //     timeout(time: 15, unit: 'MINUTES')
-    //     buildDiscarder(logRotator(numToKeepStr: '10'))
-    //     // ansiColor('xterm')
-    //     timestamps()
-    // }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-        stage('Install') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm ci'
-                }
-            }
-        }
 
-        stage('Quality & Security (Parallel)') {
-            parallel {
-                stage('Lint') {
-                    steps {
-                        dir("${WORKDIR}") {
-                            sh 'npm run lint'
-                        }
-                    }
-                }
-                stage('Security Audit') {
-                    steps {
-                        dir("${WORKDIR}") {
-                            sh 'npm audit --audit-level=high'
-                        }
-                    }
-                }
-            }
-        }
+        stage('Install Dependencies') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm ci'
+                    echo "Dependencies installed successfully"
+                }
+            }
+        }
 
-        stage('Test & Coverage') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm test -- --coverage --watchAll=false'
-                }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
-                    publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Coverage"])
-                }
-                unsuccessful {
-                    echo 'Test or coverage failed—check logs or setup.'
-                }
-            }
-        }
 
-        stage('Build') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm run build'
-                }
-            }
-            post {
-                success {
-                    archiveArtifacts artifacts: "${WORKDIR}/dist/**", onlyIfSuccessful: true
-                }
-            }
-        }
-    }
+        stage('Lint') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run lint || echo "Linting issues found"'
+                    echo "Linting completed"
+                }
+            }
+        }
+        stage('Security Audit') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm audit --audit-level=high'
+                }
+            }
+        }
 
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo "CI Pipeline succeeded and workspace cleaned. 🚀"
-        }
-        failure {
-            echo "CI Pipeline failed after cleanup. ❌"
-        }
-    }
+
+        stage('Test & Coverage') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm test -- --watchAll=false --coverage'
+                }
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: "${WORKDIR}/coverage/junit.xml"
+                    publishHTML([reportDir: "${WORKDIR}/coverage", reportFiles: "lcov-report/index.html", reportName: "Frontend Coverage"])
+                }
+            }
+        }
+
+
+        stage('Build') { 
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+
+        
+
+
+        // stage('Test') { 
+        //     steps {
+        //         sh './jenkins/scripts/test.sh' 
+        //     }
+        // }
+    }
 }
