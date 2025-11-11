@@ -1,36 +1,44 @@
-if (typeof window !== 'undefined') {
-  if (!window.localStorage) {
-    window.localStorage = {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-      clear: () => {},
-    };
-  }
-  if (!window.sessionStorage) {
-    window.sessionStorage = {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-      clear: () => {},
-    };
-  }
+const globalScope = typeof globalThis !== "undefined"
+  ? globalThis
+  : typeof window !== "undefined"
+  ? window
+  : typeof global !== "undefined"
+  ? global
+  : {};
 
-  // Add this for framer-motion and other libs that need IntersectionObserver
-  if (!window.IntersectionObserver) {
-    window.IntersectionObserver = class {
-      constructor() {}
-      observe() {}
-      disconnect() {}
-      unobserve() {}
-      takeRecords() { return []; }
-    };
-  }
+if (!globalScope.localStorage) {
+  globalScope.localStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+  };
+}
+if (!globalScope.sessionStorage) {
+  globalScope.sessionStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+  };
+}
+if (!globalScope.IntersectionObserver) {
+  globalScope.IntersectionObserver = class {
+    constructor() {}
+    observe() {}
+    disconnect() {}
+    unobserve() {}
+    takeRecords() { return []; }
+  };
+}
 
-  if (!window.scrollTo) {
-    window.scrollTo = () => {};
-  }
-  if (!document.documentElement.scrollTo) {
-    document.documentElement.scrollTo = () => {};
-  }
+if (!globalScope.scrollTo) {
+  globalScope.scrollTo = () => {};
+}
+if (
+  globalScope.document &&
+  globalScope.document.documentElement &&
+  !globalScope.document.documentElement.scrollTo
+) {
+  globalScope.document.documentElement.scrollTo = () => {};
 }
