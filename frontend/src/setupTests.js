@@ -15,4 +15,15 @@ if (typeof window !== 'undefined') {
       clear: () => {},
     };
   }
+
+  // Add this for framer-motion and other libs that need IntersectionObserver
+  if (!window.IntersectionObserver) {
+    window.IntersectionObserver = class {
+      constructor() {}
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+      takeRecords() { return []; }
+    };
+  }
 }
