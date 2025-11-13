@@ -129,7 +129,7 @@
 
 // export default Mission;
 
-
+import React from 'react';
 import { motion } from "framer-motion";
 import mission from "../assets/Mission.svg";
 import Vision from "../assets/Vision.svg";

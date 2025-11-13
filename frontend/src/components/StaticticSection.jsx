@@ -152,8 +152,7 @@
 
 // export default StatisticsSection;
 
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from 'framer-motion';
 
 const AnimatedNumber = ({ value, shouldAnimate }) => {

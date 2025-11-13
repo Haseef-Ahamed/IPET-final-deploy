@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import about_bg from "../assets/Membeship_bg_n.svg";
 import about_bg_m from "../assets/Membeship_bg_n.svg";

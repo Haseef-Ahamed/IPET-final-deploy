@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
-
+import React from 'react';
 import footer_logo from "../assets/Footer_logo.svg";
 import telephone from "../assets/Telephone.svg";
 import location from "../assets/Location.svg";
@@ -191,7 +191,7 @@ const Footer = () => {
               <div className="w-px h-12 bg-[#BFC2D6] opacity-50"></div>
 
               <div className="flex flex-col items-center space-y-2 transition-transform duration-300 hover:scale-105">
-                <img src={location} alt="Location" className="w-5 h-5" />
+                <img src={Location} alt="Location" className="w-5 h-5" />
                 <span className="text-xs font-semibold text-center">
                   No 60, Weediyawatta, Yakkala.
                 </span>
