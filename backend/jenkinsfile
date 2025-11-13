@@ -16,9 +16,13 @@ pipeline {
         stage('Security Audit') {
             steps { dir("${WORKDIR}") { sh 'npm audit --audit-level=high' } }
         }
-        stage('Build Docker Image') {
-            steps { dir("${WORKDIR}") { sh 'docker build -t my-backend:latest .' } }
-        }
+        // stage('Build Docker Image') {
+        //     steps { dir("${WORKDIR}") 
+        //         { 
+        //         sh 'docker build -t my-backend:latest .' 
+        //         } 
+        //     }
+        // }
         // Add 'Push to Docker Hub' and K8s deploy stages as your infra matures
     }
     post {
