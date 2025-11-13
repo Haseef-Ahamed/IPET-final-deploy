@@ -8,23 +8,23 @@ export default [
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "commonjs", // <-- Node.js uses CommonJS (require) by default
+      sourceType: "commonjs", // works for legacy/require style Node.js files
       globals: {
-        ...js.configs.recommended.languageOptions.globals,
-        require: true,
-        process: true,
-        console: true,
-        __dirname: true,
-        __filename: true,
-        module: true,
-        exports: true,
-        Buffer: true,
-        setImmediate: true,
+        require: "readonly",
+        process: "readonly",
+        console: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        Buffer: "readonly",
+        setImmediate: "readonly",
       },
     },
-    plugins: {},
     rules: {
-      ...js.configs.recommended.rules,
+      "no-unused-vars": "warn",
+      // Put more rules here as needed...
     },
   },
 ];
+
