@@ -16,6 +16,19 @@ pipeline {
         stage('Security Audit') {
             steps { dir("${WORKDIR}") { sh 'npm audit --audit-level=high' } }
         }
+
+        stage('Build') { 
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
+                }
+            }
+            post {
+                success {
+                   archiveArtifacts artifacts: "${WORKDIR}/dist/**", onlyIfSuccessful: true
+                }
+            }
+        }
         // stage('Build Docker Image') {
         //     steps { dir("${WORKDIR}") 
         //         { 
