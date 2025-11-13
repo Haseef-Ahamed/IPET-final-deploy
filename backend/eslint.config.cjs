@@ -1,6 +1,6 @@
-import js from "@eslint/js";
+// import js from "@eslint/js";
 
-export default [
+module.exports = [
   {
     ignores: ["node_modules", "dist"],
   },
@@ -8,7 +8,7 @@ export default [
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "commonjs", // works for legacy/require style Node.js files
+      sourceType: "commonjs",
       globals: {
         require: "readonly",
         process: "readonly",
@@ -23,7 +23,7 @@ export default [
     },
     rules: {
       "no-unused-vars": "warn",
-      // Put more rules here as needed...
+      // add additional rules as needed
     },
   },
 ];
