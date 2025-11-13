@@ -1,6 +1,6 @@
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable no-undef */
+ 
+ 
+ 
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";

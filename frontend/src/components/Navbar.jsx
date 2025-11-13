@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import fbIcon from "../assets/fb.svg";

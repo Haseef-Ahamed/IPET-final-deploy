@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-unused-vars */
+ 
+ 
 // import React, { useState, useEffect } from "react";
 // import about_bg from "../assets/Abouthero_bg.svg";
 // import about_bg_m from "../assets/Aboutus_m_bg.svg";

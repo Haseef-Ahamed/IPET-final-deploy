@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable react/no-unescaped-entities */
+ 
+ 
 // import { useState } from "react";
 // import ethanImage from "../assets/Ethan.svg";
 // import wmdImage from "../assets/wm-wedasinghe.jpg";  // Replace with actual image path

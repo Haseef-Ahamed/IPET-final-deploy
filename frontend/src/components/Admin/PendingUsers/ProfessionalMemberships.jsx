@@ -1,5 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable react/no-unknown-property */
+ 
+ 
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";

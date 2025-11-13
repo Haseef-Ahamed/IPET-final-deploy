@@ -27,7 +27,7 @@ pipeline {
         stage('Lint') {
             steps {
                 dir("${WORKDIR}") {
-                    sh 'npm run lint || echo "Linting issues found"'
+                    sh 'npm run lint'
                     echo "Linting completed"
                 }
             }

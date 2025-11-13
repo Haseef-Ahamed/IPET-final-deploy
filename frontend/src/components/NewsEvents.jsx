@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
+ 
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import about_bg from "../assets/NewsAndEvents_bg_n.svg";
