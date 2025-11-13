@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    tools { nodejs 'NodeJS 18.18.2' }
+    environment { WORKDIR = "backend" }
+    stages {
+        stage('Checkout') { steps { checkout scm } }
+        stage('Install Dependencies') {
+            steps { dir("${WORKDIR}") { sh 'npm ci' } }
+        }
+        stage('Lint') {
+            steps { dir("${WORKDIR}") { sh 'npx eslint .' } }
+        }
+        stage('Test') {
+            steps { dir("${WORKDIR}") { sh 'npm test' } }
+        }
+        stage('Security Audit') {
+            steps { dir("${WORKDIR}") { sh 'npm audit --audit-level=high' } }
+        }
+        stage('Build Docker Image') {
+            steps { dir("${WORKDIR}") { sh 'docker build -t my-backend:latest .' } }
+        }
+        // Add 'Push to Docker Hub' and K8s deploy stages as your infra matures
+    }
+    post {
+        always { echo "Finished backend CI/CD pipeline." }
+    }
+}
