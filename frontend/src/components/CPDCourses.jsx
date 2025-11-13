@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import scales from "../assets/Scales.svg";
 import graduate from "../assets/Graduate.svg";
 import network from "../assets/Network.svg";

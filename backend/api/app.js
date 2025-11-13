@@ -10,6 +10,7 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const cloudinary = require('cloudinary').v2;
 const axios = require('axios');
+require('dotenv').config();
 
 // Load environment variables
 dotenv.config();

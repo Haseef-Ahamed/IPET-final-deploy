@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+
 import memebership_bg from "../assets/Membership_bg.svg";
 import youthClub from "../assets/YouthClub.svg";
 import Fric from "../assets/Fric.svg";

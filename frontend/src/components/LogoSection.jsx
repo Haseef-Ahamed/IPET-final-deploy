@@ -351,7 +351,7 @@
 // };
 
 // export default LogoSection;
-import React from 'react';
+
 import { motion } from "framer-motion";
 import IESL from "../assets/IESL.svg";
 import ECSL from "../assets/ECSL.svg";

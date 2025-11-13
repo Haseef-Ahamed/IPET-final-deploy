@@ -358,9 +358,10 @@
 // };
 
 // export default Banner;
-import React, { useEffect, useRef, useState } from "react";
+
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import banner_bg from "../assets/Banner_bg.svg";
 import banner_M_bg from "../assets/Banner_M_bg.svg";
 import banner_bg2 from "../assets/city.jpg"; // Add your second background image

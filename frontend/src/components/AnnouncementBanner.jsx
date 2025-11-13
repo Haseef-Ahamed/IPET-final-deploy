@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AnnouncementBanner = () => {
   const [mostRecentEvent, setMostRecentEvent] = useState(null);

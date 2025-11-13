@@ -270,7 +270,8 @@
 
 // export default RegistrySearch;
 
-import React, { useEffect, useRef, useState } from "react";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
