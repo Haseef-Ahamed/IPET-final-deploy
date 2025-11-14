@@ -39,6 +39,15 @@ pipeline {
             }
         }
 
+        stage('OWSAP Dependency Check and SCAN') {
+            steps {
+                dir("${WORKDIR}") {
+                    DependencyCheck additionalArguments: '--scan ./', odcInstallation: 'DP'
+                    DependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+              }
+            }
+        }
+
         stage('Lint') {
             steps {
                 dir("${WORKDIR}") {
@@ -89,7 +98,19 @@ pipeline {
                 }
             }
         }
+
+        stage('Build & Push Docker Image') { 
+            steps {
+                dir("${WORKDIR}") {
+                    withDockerRegistry(credentialsId: '9719ecbf-56d5-4c3c-b69e-59f8687c456c', toolName: 'docker') {
+                        sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
+                        sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
+                        sh "docker push hsfahd/ipet-frontend:latest"
+                }
+            }
+        }
     
         
+        }
     }
 }
