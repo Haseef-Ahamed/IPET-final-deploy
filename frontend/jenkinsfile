@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        jdk 'jdk11'
+        jdk 'jdk11',
         nodejs 'NodeJS 25.1.0' 
     }
 
@@ -13,8 +13,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
-                // checkout scm
+                // git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
+                checkout scm
             }
         }
 
