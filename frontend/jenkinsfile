@@ -31,7 +31,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube Server') {
                     dir("${WORKDIR}") {
-                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_5614a1d75e55053bc5e0c1f2db37ecb6b19142d8 -Dsonar.ProjectName=IPET-Frontend \
+                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_4a21978886615152cf3030dcff65da54800d932e -Dsonar.ProjectName=IPET-Frontend \
                         -Dsonar.nodejs.binary=. \
                         -Dsonar.projectKey=IPET-Frontend '''
                     }
