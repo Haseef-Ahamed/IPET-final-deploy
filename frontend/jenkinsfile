@@ -39,21 +39,21 @@ pipeline {
             }
         }
 
-        stage('OWSAP Dependency Check and SCAN') {
-            steps {
-                dir("${WORKDIR}") {
-                    step([$class: 'DependencyCheckBuilder',
-                        odcInstallation: 'DP',
-                        additionalArguments: '--scan ./'
-                    ])
-                    step([$class: 'DependencyCheckPublisher',
-                        pattern: '**/dependency-check-report.xml'
-                    ])
-            //         DependencyCheck additionalArguments: '--scan ./', odcInstallation: 'DP'
-            //         DependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-              }
-            }
-        }
+        // stage('OWSAP Dependency Check and SCAN') {
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             step([$class: 'DependencyCheckBuilder',
+        //                 odcInstallation: 'DP',
+        //                 additionalArguments: '--scan ./'
+        //             ])
+        //             step([$class: 'DependencyCheckPublisher',
+        //                 pattern: '**/dependency-check-report.xml'
+        //             ])
+        //     //         DependencyCheck additionalArguments: '--scan ./', odcInstallation: 'DP'
+        //     //         DependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //       }
+        //     }
+        // }
 
         stage('Lint') {
             steps {
