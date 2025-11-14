@@ -1,13 +1,13 @@
 pipeline {
     agent any
     tools {
-        jdk 'jdk11',
+        jdk 'jdk11'
         nodejs 'NodeJS 25.1.0' 
     }
 
     environment {
-        SCANNER_HOME = tool 'sonar-scanner',
-        WORKDIR = "frontend"
+        SCANNER_HOME = tool 'sonar-scanner'
+        WORKDIR = 'frontend'
     }
 
     stages {
