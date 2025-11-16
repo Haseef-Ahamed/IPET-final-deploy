@@ -12,8 +12,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
-                // checkout scm
+                // git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
+                checkout scm
             }
         }
 
