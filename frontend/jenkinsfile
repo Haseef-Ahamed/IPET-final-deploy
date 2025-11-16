@@ -108,7 +108,7 @@ pipeline {
         stage('Build & Push Docker Image') { 
             steps {
                 dir("${WORKDIR}") {
-                    withDockerRegistry(credentialsId: 'b1a652c5-5c8c-473e-b258-cd6821349cd4', toolName: 'docker') { 
+                    withDockerRegistry(credentialsId: 'b1a652c5-5c8c-473e-b258-cd6821349cd4') { 
                         sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
                         sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
                         sh "docker push hsfahd/ipet-frontend:latest"
