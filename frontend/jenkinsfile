@@ -12,8 +12,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
+                // checkout scm
             }
         }
 
@@ -30,7 +30,7 @@ pipeline {
         //     steps {
         //         withSonarQubeEnv('SonarQube Server') {
         //             dir("${WORKDIR}") {
-        //                 sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_17c64093de7844978c79875e7769690ec6070886 -Dsonar.ProjectName=IPET-Front \
+        //                 sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_75fc7246461b7ba7ef403fbc0f251427e5de5f1e -Dsonar.ProjectName=IPET-Front \
         //                 -Dsonar.nodejs.binary=. \
         //                 -Dsonar.projectKey=IPET-Front '''
         //             }
