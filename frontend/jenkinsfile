@@ -5,7 +5,7 @@ pipeline {
     }
 
     environment {
-        // SCANNER_HOME = tool  'sonar-scanner'
+        SCANNER_HOME = tool  'sonar-scanner'
         WORKDIR = 'frontend'
     }
 
@@ -30,9 +30,9 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube Server') {
                     dir("${WORKDIR}") {
-                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_17c64093de7844978c79875e7769690ec6070886 -Dsonar.ProjectName=IPET-Frontend \
+                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_17c64093de7844978c79875e7769690ec6070886 -Dsonar.ProjectName=IPET-Front \
                         -Dsonar.nodejs.binary=. \
-                        -Dsonar.projectKey=IPET-Frontend '''
+                        -Dsonar.projectKey=IPET-Front '''
                     }
                 }
             }
