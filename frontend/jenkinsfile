@@ -12,8 +12,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Haseef-Ahamed/IPET-final-deploy.git'
+                // checkout scm
             }
         }
 
@@ -105,18 +105,18 @@ pipeline {
             }
         }
 
-        // stage('Build & Push Docker Image') { 
-        //     steps {
-        //         dir("${WORKDIR}") {
-        //             withDockerRegistry(credentialsId: '40a10175-3b5a-4b00-9bdc-2d3c5293ec4c', toolName: 'docker') { 
-        //                 sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
-        //                 sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
-        //                 sh "docker push hsfahd/ipet-frontend:latest"
-        //         }
-        //     }
-        // }
+        stage('Build & Push Docker Image') { 
+            steps {
+                dir("${WORKDIR}") {
+                    withDockerRegistry(credentialsId: 'b1a652c5-5c8c-473e-b258-cd6821349cd4', toolName: 'docker') { 
+                        sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
+                        sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
+                        sh "docker push hsfahd/ipet-frontend:latest"
+                }
+            }
+        }
     
         
-        // }
+        }
     }
 }
