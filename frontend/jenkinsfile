@@ -30,7 +30,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube Server') {
                     dir("${WORKDIR}") {
-                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_4a21978886615152cf3030dcff65da54800d932e -Dsonar.ProjectName=IPET-Frontend \
+                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_17c64093de7844978c79875e7769690ec6070886 -Dsonar.ProjectName=IPET-Frontend \
                         -Dsonar.nodejs.binary=. \
                         -Dsonar.projectKey=IPET-Frontend '''
                     }
@@ -108,7 +108,7 @@ pipeline {
         stage('Build & Push Docker Image') { 
             steps {
                 dir("${WORKDIR}") {
-                    withDockerRegistry(credentialsId: 'fb862fdc-8840-4b1d-9cf2-73533bd627b4', toolName: 'docker') { 
+                    withDockerRegistry(credentialsId: '40a10175-3b5a-4b00-9bdc-2d3c5293ec4c', toolName: 'docker') { 
                         sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
                         sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
                         sh "docker push hsfahd/ipet-frontend:latest"
