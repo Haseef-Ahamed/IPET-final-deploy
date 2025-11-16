@@ -13,6 +13,7 @@ pipeline {
         stage('Hello') {
             steps {
                 sh 'node --version'
+                sh 'npm --version'
                 echo "Hello from Node!"
             }
         }
@@ -29,6 +30,18 @@ pipeline {
                 dir("${WORKDIR}") {
                     sh 'npm ci'
                     echo "Completly Clear the Existed node_modules and Install Fresh Dependencies"
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube Server') {
+                    dir("${WORKDIR}") {
+                        sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.url=http://192.168.56.1:9000/ -Dsonar.login=squ_75fc7246461b7ba7ef403fbc0f251427e5de5f1e -Dsonar.ProjectName=IPET-Front \
+                        -Dsonar.nodejs.binary=. \
+                        -Dsonar.projectKey=IPET-Front '''
+                    }
                 }
             }
         }
