@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    tools { nodejs 'NodeJS 25.1.0' }
+    tools { nodejs 'NodeJS25'}
     environment { WORKDIR = "backend" }
     stages {
         stage('Checkout') { 
