@@ -27,8 +27,11 @@ pipeline {
         stage('Test') {
             steps {
                  dir("${WORKDIR}") {
-                    sh 'npm ci'
+                    sh 'npm install'
                     sh 'npm run mocha'
+                    // sh 'npm install --save-dev jest-junit'
+                    // sh 'npm test -- --reporters=default --reporters=jest-junit'
+                    // sh 'npm run mocha'
                 // Install the JUnit reporter if missing
                     // sh 'npm install --save-dev mocha-junit-reporter'
                 // Run Mocha with npm test if scripted, or directly; assumes package.json has "test": "mocha test/**/*.js"
