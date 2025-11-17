@@ -91,10 +91,11 @@ pipeline {
                         sh "docker build -t ipet-frontend:latest -f docker/Dockerfile ."
                         sh "docker tag ipet-frontend:latest hsfahd/ipet-frontend:latest"
                         sh "docker push hsfahd/ipet-frontend:latest"
+                    }
                 }
             }
-        }
 
       
+        }
     }
 }
