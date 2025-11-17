@@ -24,25 +24,29 @@ pipeline {
                     } 
                 }
         }
-        // stage('Test') {
-        //     steps { 
-        //         dir("${WORKDIR}") { 
-        //             sh 'npm test --save-dev mohca-junit-reporter'
-        //             sh 'npx mocha --reporter mohca-junit-reporter --reporter-options mochaFile=./test-results.xml'
-        //             } 
-        //         }
-        //         post {
-        //             always {
-        //                 junit "${WORKDIR}/test-results.xml"
-        //             }
-        //             success {
-        //                 echo 'Tests passed successfully.'
-        //             }
-        //             failure {
-        //                 echo 'mocha tests failed. Please check the test results.'
-        //             }
-        //         }
-        // }
+        stage('Test') {
+            steps {
+                 dir("${WORKDIR}") {
+                // Install the JUnit reporter if missing
+                    sh 'npm install --save-dev mocha-junit-reporter'
+                // Run Mocha with npm test if scripted, or directly; assumes package.json has "test": "mocha test/**/*.js"
+                    sh 'npm test -- --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results.xml'
+                    // Alternative direct Mocha run if npm script not configured
+                    // sh 'npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results.xml test/**/*.js'
+                 }
+            }
+            post {
+             always {
+                junit "${WORKDIR}/test-results.xml"
+            }
+            success {
+                echo 'Tests passed successfully.'
+            }
+            failure {
+                echo 'Mocha tests failed. Please check the test results.'
+            }
+            }
+        }
         stage('Security Audit') {
             steps { 
                 dir("${WORKDIR}") { 
