@@ -3,18 +3,38 @@ pipeline {
     tools { nodejs 'NodeJS 25.1.0' }
     environment { WORKDIR = "backend" }
     stages {
-        stage('Checkout') { steps { checkout scm } }
+        stage('Checkout') { 
+            steps { 
+                checkout scm
+                 } 
+            }
         stage('Install Dependencies') {
-            steps { dir("${WORKDIR}") { sh 'npm ci' } }
+            steps { 
+                dir("${WORKDIR}") { 
+                    sh 'npm ci' 
+                    } 
+                }
         }
         stage('Lint') {
-            steps { dir("${WORKDIR}") { sh 'npx eslint .' } }
+            steps { 
+                dir("${WORKDIR}") { 
+                    sh 'npx eslint .' 
+                    } 
+                }
         }
         stage('Test') {
-            steps { dir("${WORKDIR}") { sh 'npm test' } }
+            steps { 
+                dir("${WORKDIR}") { 
+                    sh 'npm test' 
+                    } 
+                }
         }
         stage('Security Audit') {
-            steps { dir("${WORKDIR}") { sh 'npm audit --audit-level=high' } }
+            steps { 
+                dir("${WORKDIR}") { 
+                    sh 'npm audit --audit-level=high' 
+                } 
+            }
         }
 
         // stage('Build') { 
@@ -39,6 +59,6 @@ pipeline {
         // Add 'Push to Docker Hub' and K8s deploy stages as your infra matures
     }
     post {
-        always { echo "Finished backend CI/CD pipeline." }
+        always { echo "Finished backend CI pipeline." }
     }
 }
