@@ -1,0 +1,14 @@
+pipeline{
+    agent any
+    stages {
+        stage('Docker Deploy To Container') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: '1af1a62d-8790-4658-9c10-f0f19cbc0708', url: 'https://index.docker.io/v1/') {
+                        sh "docker run -d --name ipet-frontend-container -p 8070:8070 hsfahd/ipet-frontend:latest"
+                    }
+                }
+            }
+        }
+    }
+}

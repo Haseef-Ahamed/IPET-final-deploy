@@ -95,5 +95,11 @@ pipeline {
                 }
             }
         }
+
+        stage('Trigger CD Pipeline') {
+            steps {
+                build job: 'IPET-CD-Pipeline', wait: true
+            }
+        }
     }
 }
