@@ -1,5 +1,5 @@
- 
- 
+/* eslint-disable no-undef */
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -55,7 +55,7 @@ const PersonalInformation = () => {
       }).catch(async (error) => {
         console.error("Direct download failed:", error.message);
         return axios({
-          url: `http://72.60.42.161/api/download-birth-certificate/${userId}`,
+          url: `http://localhost:5000/api/download-birth-certificate/${userId}`,
           method: "GET",
           responseType: "blob",
         });
@@ -88,7 +88,7 @@ const PersonalInformation = () => {
       const fetchUserDetails = async () => {
         try {
           console.log("Fetching details for userId:", userId);
-          const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
+          const response = await axios.get(`http://localhost:5000/api/user-details/${userId}`);
           console.log("Fetched user data:", response.data);
           setUserData(response.data);
         } catch (error) {

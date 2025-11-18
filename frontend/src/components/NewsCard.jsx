@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -7,205 +7,176 @@ const EventCards = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState(null);
-  const [touchEndX, setTouchEndX] = useState(null);
-  const touchRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Animation variants
+  const EVENTS_PER_PAGE = 6;
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        when: "beforeChildren",
-      },
+      transition: { staggerChildren: 0.1, when: "beforeChildren" },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
-      y: 0,
       opacity: 1,
+      y: 0,
       transition: { duration: 0.6, ease: "easeOut" },
+    },
+    hover: {
+      scale: 1.03,
+      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+      transition: { duration: 0.3 },
     },
   };
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://72.60.42.161/api/events-courses/event");
+        const response = await fetch("http://localhost:5000/api/events-courses/event");
         if (!response.ok) throw new Error("Failed to fetch events");
         const data = await response.json();
-        console.log("Fetched events:", data); // Debug
         setEvents(data);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
-
     fetchEvents();
   }, []);
 
-  // Handle touch events for swiping
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches[0].clientX);
-    setTouchEndX(null);
-    // Prevent scrolling during swipe
-    e.preventDefault();
-  };
+  /* ------------------- Pagination Logic ------------------- */
+  const paginatedEvents = useMemo(() => {
+    const start = (currentPage - 1) * EVENTS_PER_PAGE;
+    const end = start + EVENTS_PER_PAGE;
+    return events.slice(start, end);
+  }, [events, currentPage]);
 
-  const handleTouchMove = (e) => {
-    setTouchEndX(e.touches[0].clientX);
-  };
+  const totalPages = Math.ceil(events.length / EVENTS_PER_PAGE);
 
-  const handleTouchEnd = () => {
-    if (touchStartX !== null && touchEndX !== null) {
-      const deltaX = touchStartX - touchEndX;
-      const swipeThreshold = 50; // Minimum pixels to consider a swipe
-      if (deltaX > swipeThreshold) {
-        // Swipe left: go to next
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length);
-      } else if (deltaX < -swipeThreshold) {
-        // Swipe right: go to previous
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + events.length) % events.length);
-      }
-    }
-    setTouchStartX(null);
-    setTouchEndX(null);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleEventClick = (eventId) => {
     navigate(`/events/${eventId}`);
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading events...</div>;
-  }
-
-  if (error) {
-    return <div className="flex items-center justify-center min-h-screen text-red-500">Error: {error}</div>;
-  }
-
-  if (events.length === 0) {
-    return <div className="flex items-center justify-center min-h-screen text-gray-600">No events available.</div>;
-  }
+  if (loading) return <div className="flex items-center justify-center min-h-screen text-[#2D387D]">Loading events...</div>;
+  if (error) return <div className="flex items-center justify-center min-h-screen text-red-500">Error: {error}</div>;
+  if (events.length === 0) return <div className="flex items-center justify-center min-h-screen text-gray-600">No events available.</div>;
 
   return (
-    <>
-      {/* Desktop View */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, margin: "-100px 0px -100px 0px" }}
-        variants={containerVariants}
-        className="hidden min-h-screen px-16 mb-20 -mb-10 bg-white py-28 sm:px-10 md:px-20 md:block"
-      >
-        <div className="mx-auto max-w-7xl">
-          <motion.div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-            {events.map((event) => (
+    <motion.div
+      className="py-12 mb-20 bg-gray-50"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, margin: "-100px" }}
+      variants={containerVariants}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        {/* Events Grid – 6 per page */}
+        <motion.div
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 px-4 sm:px-0"
+          variants={containerVariants}
+        >
+          {paginatedEvents.map((event, index) => (
+            <motion.div
+              key={event.id}
+              variants={itemVariants}
+              whileHover="hover"
+              onClick={() => handleEventClick(event.id)}
+              className="overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-md cursor-pointer flex flex-col min-h-[380px]"
+              custom={index}
+            >
+              {/* Image */}
               <motion.div
-                key={event.id}
-                variants={itemVariants}
-                whileHover={{ scale: 1.03 }}
+                className="w-full h-64 overflow-hidden"
+                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
-                <div
-                  className="bg-[#E9ECF7] shadow-lg p-[35px] overflow-hidden cursor-pointer"
-                  onClick={() => handleEventClick(event.id)}
-                >
-                  <motion.img
-                    src={event.main_image_url}
-                    alt={event.title}
-                    className="w-full h-[304px] object-cover"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <h3 className="mt-4 font-semibold text-[#2543B1]">{event.title}</h3>
-                </div>
+                <img
+                  src={event.main_image_url}
+                  alt={event.title}
+                  className="object-cover w-full h-full"
+                />
               </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.div>
 
-      {/* Mobile View */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, margin: "-50px 0px -50px 0px" }}
-        variants={containerVariants}
-        className="min-h-[255px] bg-gray-50 py-12 px-2 sm:px-10 md:px-20 md:hidden"
-      >
-        <div className="max-w-full mx-auto">
-          <motion.div variants={itemVariants} className="mb-8 text-center">
-            <h2 className="text-[14px] font-[400] text-[#000000]">Events</h2>
-            <h1 className="text-[14px] font-[600] text-[#2543B1] mt-2">Latest Events</h1>
-          </motion.div>
+              {/* Title + Button */}
+              <div className="p-5 flex-1 flex flex-col items-center justify-center gap-3">
+                <h2 className="text-lg font-semibold text-[#2D387D] text-center line-clamp-3">
+                  {event.title}
+                </h2>
 
-          <div className="max-w-full px-5 mx-auto mb-20">
-            <motion.div variants={itemVariants} className="relative">
-              <div
-                className="overflow-hidden"
-                ref={touchRef}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-              >
-                <motion.div
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{
-                    transform: `translateX(-${currentIndex * 100}%)`,
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEventClick(event.id);
                   }}
-                  animate={{ x: `-${currentIndex * 100}%` }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="px-4 py-1.5 text-sm font-medium text-white bg-[#0000FF] rounded hover:bg-[#0000CC] transition-colors"
                 >
-                  {events.map((event) => (
-                    <div
-                      key={event.id}
-                      className="flex items-center justify-between flex-shrink-0 w-full"
-                    >
-                      <div
-                        className="bg-[#E9ECF7] shadow-lg p-[15px] w-full h-[250px] overflow-hidden"
-                        onClick={() => handleEventClick(event.id)}
-                      >
-                        <img
-                          src={event.main_image_url}
-                          alt={event.title}
-                          className="w-full h-[180px] object-cover"
-                        />
-                        <h3 className="mt-4 font-semibold text-[#2543B1] text-[14px]">{event.title}</h3>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
+                  View More
+                </button>
               </div>
-
-              <motion.div variants={itemVariants} className="flex justify-center gap-2 mt-5">
-                {events.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      currentIndex === index ? "bg-[#2D387D80] w-3" : "bg-[#2D387D33]"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </motion.div>
             </motion.div>
-          </div>
-        </div>
-      </motion.div>
-    </>
+          ))}
+        </motion.div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <motion.div
+            className="flex justify-center items-center gap-2 mt-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                currentPage === 1
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-[#2D387D] text-white hover:bg-[#1e2655]"
+              }`}
+            >
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                  currentPage === page
+                    ? "bg-[#2D387D] text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                currentPage === totalPages
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-[#2D387D] text-white hover:bg-[#1e2655]"
+              }`}
+            >
+              Next
+            </button>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
   );
 };
 

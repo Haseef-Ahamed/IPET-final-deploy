@@ -56,7 +56,7 @@ const ForwardSection = () => {
     }
 
     try {
-      const response = await fetch("http://72.60.42.161/api/forward-form", {
+      const response = await fetch("http://localhost:5000/api/forward-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

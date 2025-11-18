@@ -77,7 +77,7 @@ const ApprovalSection = () => {
         [adminStatusField]: "approved"
       });
       
-      const response = await fetch("http://72.60.42.161/api/approve-user", {
+      const response = await fetch("http://localhost:5000/api/approve-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const ApprovalSection = () => {
         [adminStatusField]: "rejected"
       });
 
-      const response = await fetch("http://72.60.42.161/api/reject-user", {
+      const response = await fetch("http://localhost:5000/api/reject-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

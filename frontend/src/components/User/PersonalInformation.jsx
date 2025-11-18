@@ -315,7 +315,7 @@ const PersonalInformation = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
+        const response = await axios.get(`http://localhost:5000/api/user-details/${userId}`);
         const userData = response.data;
 
         // Convert the dob field to yyyy-MM-dd format
@@ -384,7 +384,7 @@ const PersonalInformation = () => {
           name === "profile_picture"
             ? "upload/profile-picture"
             : "upload/birth-certificate";
-        const response = await axios.post(`http://72.60.42.161/api/${endpoint}`, formData, {
+        const response = await axios.post(`http://localhost:5000/api/${endpoint}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
@@ -415,7 +415,7 @@ const PersonalInformation = () => {
       }
 
       const response = await axios({
-        url: `http://72.60.42.161/api/download-birth-certificate/${userId}`,
+        url: `http://localhost:5000/api/download-birth-certificate/${userId}`,
         method: "GET",
         responseType: "blob",
       });
@@ -443,7 +443,7 @@ const PersonalInformation = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://72.60.42.161/api/update-user/${userId}`,
+        `http://localhost:5000/api/update-user/${userId}`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -1372,18 +1372,19 @@ const PersonalInformation = () => {
             <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row">
               <button
                 type="submit"
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+                className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#F5B027] text-white hover:bg-[#E4D00A] transition-colors"
               >
                 Update
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
+                className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
               >
                 Next
               </button>
             </div>
+
           </form>
         </div>
       </div>

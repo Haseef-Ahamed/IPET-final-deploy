@@ -11,8 +11,9 @@
 // import graduates from "../assets/Graduates.svg";
 // import worker from "../assets/Worker.svg";
 // import ViewCourses from "../pages/ViewCourses";
-import React, { useEffect, useRef, useState } from "react";
+
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 // const SearchResultsPage = () => {
@@ -109,7 +110,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 //         // Fetch all courses
 //         const response = await axios.get(
-//           "http://72.60.42.161/api/events-courses/course"
+//           "http://localhost:5000/api/events-courses/course"
 //         );
 
 //         if (response.data) {
@@ -391,7 +392,7 @@ const SearchResultsPage = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://72.60.42.161/api/events-courses/course"
+          "http://localhost:5000/api/events-courses/course"
         );
         
         if (response.data) {

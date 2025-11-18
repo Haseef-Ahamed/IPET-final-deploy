@@ -53,7 +53,7 @@ const AcadamicQulification = () => {
       const fetchUserDetails = async () => {
         try {
           console.log("Fetching details for userId:", userId);
-          const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
+          const response = await axios.get(`http://localhost:5000/api/user-details/${userId}`);
           const data = response.data;
 
           // Parse the higher_education_institutes field

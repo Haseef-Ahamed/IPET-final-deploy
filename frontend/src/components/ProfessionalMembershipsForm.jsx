@@ -1,8 +1,8 @@
- 
- 
- 
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -129,7 +129,7 @@ const ProfessionalMembershipsForm = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://72.60.42.161/api/membership_upload", {
+      const response = await fetch("http://localhost:5000/api/membership_upload", {
         method: "POST",
         body: formData,
       });
@@ -181,7 +181,7 @@ const ProfessionalMembershipsForm = () => {
       // Only make API call if there are records to submit
       if (professionalMemberships.length > 0) {
         const response = await fetch(
-          "http://72.60.42.161/api/register/professional-membership",
+          "http://localhost:5000/api/register/professional-membership",
           {
             method: "POST",
             headers: {

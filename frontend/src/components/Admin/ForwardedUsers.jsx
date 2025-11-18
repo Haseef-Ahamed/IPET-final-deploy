@@ -19,7 +19,7 @@ const ForwardUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://72.60.42.161/api/user-details");
+        const response = await fetch("http://localhost:5000/api/user-details");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }

@@ -22,7 +22,7 @@ const ResetPassword = () => {
 
     try {
       // Send the new password and reset token to the backend
-      const response = await axios.post("http://72.60.42.161/api/admin/reset-password", {
+      const response = await axios.post("http://localhost:5000/api/admin/reset-password", {
         token,
         password,
       });

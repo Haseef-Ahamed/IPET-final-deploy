@@ -1,4 +1,4 @@
- 
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -70,7 +70,7 @@ const AcademicQualification = () => {
       const fetchUserDetails = async () => {
         try {
           console.log("Fetching details for userId:", userId);
-          const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
+          const response = await axios.get(`http://localhost:5000/api/user-details/${userId}`);
           console.log("Fetched user data:", response.data);
           setUserData(response.data);
         } catch (error) {
@@ -325,17 +325,17 @@ const AcademicQualification = () => {
                 )}
               </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row">
+              {/* Navigation Buttons - Same Size on Web */}
+              <div className="flex justify-end gap-4 mt-8">
                 <button
                   onClick={() => navigate(`/personal-r/${userId}`)}
-                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2A3990] focus:ring-opacity-50"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => navigate(`/training/${userId}`)}
-                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
+                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2A3990] focus:ring-opacity-50"
                 >
                   Next
                 </button>

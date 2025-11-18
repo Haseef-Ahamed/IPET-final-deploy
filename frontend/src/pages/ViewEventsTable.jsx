@@ -9,17 +9,19 @@ const ViewEventsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState([]);
 
-  // Fetch all events from the API
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "http://72.60.42.161/api/events-courses/event"
+          "http://localhost:5000/api/events-courses/event"
         );
         setEvents(response.data);
-        setFilteredEvents(response.data); // Initialize filtered events with all events
+        setFilteredEvents(response.data);
       } catch (error) {
-        console.error("Error fetching events:", error);
         Swal.fire({
           title: "Error",
           text: "Failed to fetch events. Please try again later.",
@@ -32,7 +34,7 @@ const ViewEventsTable = () => {
     fetchEvents();
   }, []);
 
-  // Handle search functionality
+  // Search filter
   useEffect(() => {
     const results = events.filter(
       (event) =>
@@ -41,9 +43,10 @@ const ViewEventsTable = () => {
         event.uploaded_date.includes(searchTerm)
     );
     setFilteredEvents(results);
+    setCurrentPage(1);
   }, [searchTerm, events]);
 
-  // Handle delete event
+  // Handle delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -56,10 +59,8 @@ const ViewEventsTable = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(
-            `http://72.60.42.161/api/events-courses/${id}`
-          );
-          setEvents(events.filter((event) => event.id !== id)); // Remove deleted event from state
+          await axios.delete(`http://localhost:5000/api/events-courses/${id}`);
+          setEvents(events.filter((event) => event.id !== id));
           Swal.fire({
             title: "Deleted!",
             text: "The event has been deleted.",
@@ -67,7 +68,6 @@ const ViewEventsTable = () => {
             confirmButtonText: "OK",
           });
         } catch (error) {
-          console.error("Error deleting event:", error);
           Swal.fire({
             title: "Error",
             text: "Failed to delete event. Please try again later.",
@@ -79,14 +79,20 @@ const ViewEventsTable = () => {
     });
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentEvents = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mb-20">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-blue-600 mb-8">
           View Events
         </h1>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="mb-6">
           <input
             type="text"
@@ -97,9 +103,9 @@ const ViewEventsTable = () => {
           />
         </div>
 
-        {/* Desktop View - Table */}
-        <div className="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
-          <table className="min-w-full">
+        {/* Table */}
+        <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+          <table className="min-w-full table-auto">
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -117,35 +123,30 @@ const ViewEventsTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredEvents.map((event) => (
+              {currentEvents.map((event) => (
                 <tr key={event.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {event.title}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {event.title}
                   </td>
-                  <td className="px-6 py-4 whitespace-normal">
-                    <div className="text-sm text-gray-900">
-                      {event.description.length > 100
-                        ? `${event.description.substring(0, 100)}...` // Truncate to 100 characters
-                        : event.description}
-                    </div>
+                  <td className="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                    <div
+                      className="line-clamp-3"
+                      dangerouslySetInnerHTML={{ __html: event.description }}
+                    />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {new Date(event.uploaded_date).toLocaleDateString()}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(event.uploaded_date).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     <button
                       onClick={() => navigate(`/update-event/${event.id}`)}
-                      className="text-sm bg-blue-500 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-600"
+                      className="px-3 py-1 mr-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
                     >
                       Update
                     </button>
                     <button
                       onClick={() => handleDelete(event.id)}
-                      className="text-sm bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                      className="px-3 py-1 text-sm text-white bg-red-500 rounded-md hover:bg-red-600"
                     >
                       Delete
                     </button>
@@ -156,48 +157,47 @@ const ViewEventsTable = () => {
           </table>
         </div>
 
-        {/* Mobile View - Card Layout */}
-        <div className="md:hidden space-y-4">
-          {filteredEvents.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-6 space-x-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-white bg-blue-500 rounded-md disabled:opacity-50"
             >
-              <div className="mb-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  {event.title}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {new Date(event.uploaded_date).toLocaleDateString()}
-                </p>
-              </div>
-              <p className="text-sm text-gray-700 mb-4">
-                {event.description.length > 100
-                  ? `${event.description.substring(0, 100)}...`
-                  : event.description}
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => navigate(`/update-event/${event.id}`)}
-                  className="flex-1 text-sm bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(event.id)}
-                  className="flex-1 text-sm bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentPage(idx + 1)}
+                className={`px-3 py-1 rounded-md ${
+                  currentPage === idx + 1
+                    ? "bg-blue-700 text-white"
+                    : "bg-blue-200 text-gray-700"
+                }`}
+              >
+                {idx + 1}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-white bg-blue-500 rounded-md disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
-        {/* No events found message */}
+        {/* No events */}
         {filteredEvents.length === 0 && (
-          <div className="bg-white shadow-md rounded-lg p-6 text-center">
-            <p className="text-gray-500">No events found. Try a different search term.</p>
+          <div className="p-6 text-center bg-white rounded-lg shadow-md mt-4">
+            <p className="text-gray-500">
+              No events found. Try a different search term.
+            </p>
           </div>
         )}
       </div>

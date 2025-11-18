@@ -45,7 +45,7 @@ const ProfessionalMemberships = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://72.60.42.161/api/user-details/${userId}`);
+        const response = await fetch(`http://localhost:5000/api/user-details/${userId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch user data.");
         }
@@ -132,7 +132,7 @@ const ProfessionalMemberships = () => {
     uploadData.append("file", renamedFile);
 
     try {
-      const response = await fetch("http://72.60.42.161/api/upload/membership-certificate", {
+      const response = await fetch("http://localhost:5000/api/upload/membership-certificate", {
         method: "POST",
         body: uploadData,
       });
@@ -225,7 +225,7 @@ const ProfessionalMemberships = () => {
 
       console.log("Payload being sent:", membershipData);
 
-      const response = await fetch("http://72.60.42.161/api/register/professional-membership", {
+      const response = await fetch("http://localhost:5000/api/register/professional-membership", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -532,28 +532,32 @@ const ProfessionalMemberships = () => {
               </div>
             ))}
 
-            <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#F5B027] text-white hover:bg-[#1b2142] transition-colors"
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
-              >
-                Next
-              </button>
-            </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row mb-12">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+            >
+              Back
+            </button>
+
+            <button
+              type="submit"
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#F5B027] text-white hover:bg-[#E4D00A] transition-colors"
+            >
+              Update
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+            >
+              Next
+            </button>
+          </div>
+
           </div>
         </form>
       </div>

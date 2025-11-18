@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
 import Select from "react-select";
@@ -340,8 +340,8 @@ const RegisterPage_1 = () => {
       try {
         const response = await fetch(
           type === "picture"
-            ? "http://72.60.42.161/api/upload/profile-picture"
-            : "http://72.60.42.161/api/upload/birth-certificate",
+            ? "http://localhost:5000/api/upload/profile-picture"
+            : "http://localhost:5000/api/upload/birth-certificate",
           {
             method: "POST",
             body: formData,
@@ -469,7 +469,7 @@ const RegisterPage_1 = () => {
   
     try {
       // Send the form data to the backend API
-      const response = await fetch("http://72.60.42.161/api/register/personal", {
+      const response = await fetch("http://localhost:5000/api/register/personal", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1420,7 +1420,8 @@ const RegisterPage_1 = () => {
                           <label className="block text-[18px] text-[#000000] font-[700] mt-5">
                             Profile Picture Upload : *
                           </label>
-                          <div className="flex items-center gap-4"> {/* Flex container to align items horizontally */}
+                          <div className="flex items-center gap-4">
+                            {/* Hidden file input */}
                             <input
                               type="file"
                               id="pictureInput"
@@ -1428,21 +1429,30 @@ const RegisterPage_1 = () => {
                               accept="image/*"
                               onChange={(e) => handleFileSelect(e, "picture")}
                             />
+
+                            {/* Browse button */}
                             <button
-                              type="button" // Add type="button" to prevent form submission
+                              type="button"
                               onClick={(e) => {
-                                e.preventDefault(); // Prevent default form submission
+                                e.preventDefault();
                                 document.getElementById("pictureInput").click();
                               }}
                               className="lg:w-[118px] w-full bg-[#2D387D] text-white rounded p-2 hover:bg-[#232d66] transition-colors"
                             >
                               Browse...
                             </button>
-                            {picturePreview && ( // Display the preview in a small circle
-                              <div className="flex items-center gap-2"> {/* New flex container for preview and name */}
+
+                            {/* Text after the button */}
+                            <span className="text-xs text-gray-500">
+                              Maximum file size: 5 MB
+                            </span>
+
+                            {/* Preview and file name */}
+                            {picturePreview && (
+                              <div className="flex items-center gap-2">
                                 <div
                                   className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#2D387D] flex items-center justify-center"
-                                  style={{ minWidth: "40px", minHeight: "40px" }} // Ensure fixed size
+                                  style={{ minWidth: "40px", minHeight: "40px" }}
                                 >
                                   <img
                                     src={picturePreview}
@@ -1450,52 +1460,70 @@ const RegisterPage_1 = () => {
                                     className="w-full h-full object-cover"
                                   />
                                 </div>
-                                {pictureName && ( // Display the file name to the right of the preview
+                                {pictureName && (
                                   <div className="text-sm break-all">
                                     {pictureName}
                                   </div>
                                 )}
                               </div>
                             )}
-                          {errors.profile_picture_path && (
-                            <p className="text-red-500 text-sm mt-1">{errors.profile_picture_path}</p>
-                          )}
+
+                            {/* Error message */}
+                            {errors.profile_picture_path && (
+                              <p className="text-red-500 text-sm mt-1">
+                                {errors.profile_picture_path}
+                              </p>
+                            )}
                           </div>
                         </div>
 
-                      {/* Birth Certificate Upload */}
-                      <div>
-                        <label className="block text-[18px] text-[#000000] font-[700] mb-1">
-                          Birth Certificate Upload : *
-                        </label>
-                        <div className="flex items-center gap-4"> {/* Flex container to align items horizontally */}
-                          <input
-                            type="file"
-                            id="certificateInput"
-                            className="hidden"
-                            accept=".pdf,.jpg,.jpeg,.png"
-                            onChange={(e) => handleFileSelect(e, "certificate")}
-                          />
-                          <button
-                            type="button" // Add type="button" to prevent form submission
-                            onClick={(e) => {
-                              e.preventDefault(); // Prevent default form submission
-                              document.getElementById("certificateInput").click();
-                            }}
-                            className="lg:w-[118px] w-full bg-[#2D387D] text-white rounded p-2 hover:bg-[#232d66] transition-colors"
-                          >
-                            Browse...
-                          </button>
-                          {certificateName && ( // Display the file name to the right of the button
-                            <div className="text-sm break-all">
-                              {certificateName}
-                            </div>
-                          )}
+                        {/* Birth Certificate Upload */}
+                        <div>
+                          <label className="block text-[18px] text-[#000000] font-[700] mb-1">
+                            Birth Certificate Upload : * 
+                          </label>
+                          <div className="flex items-center gap-3">
+                            {/* Hidden file input */}
+                            <input
+                              type="file"
+                              id="certificateInput"
+                              className="hidden"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              onChange={(e) => handleFileSelect(e, "certificate")}
+                            />
+
+                            {/* Browse button */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById("certificateInput").click();
+                              }}
+                              className="lg:w-[118px] w-full bg-[#2D387D] text-white rounded p-2 hover:bg-[#232d66] transition-colors"
+                            >
+                              Browse...
+                            </button>
+
+                            {/* Text after the button */}
+                            <span className="text-xs text-gray-500">
+                              Maximum file size: 5 MB
+                            </span>
+
+                            {/* Display selected file name */}
+                            {certificateName && (
+                              <div className="text-sm break-all">
+                                {certificateName}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Error message */}
                           {errors.birth_certificate_path && (
-                            <p className="text-red-500 text-sm mt-1">{errors.birth_certificate_path}</p>
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors.birth_certificate_path}
+                            </p>
                           )}
                         </div>
-                      </div>
 
                       {/* Password Field */}
                       <div>

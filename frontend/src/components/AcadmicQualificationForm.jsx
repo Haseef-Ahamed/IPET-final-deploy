@@ -1,8 +1,6 @@
-// import React, { useEffect, useRef, useState } from "react";
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-// import { IoAddCircleOutline, IoReload, IoRemoveCircleOutline } from "react-icons/io5";
-import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
+import { IoAddCircleOutline, IoReload, IoRemoveCircleOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 
 const AcadmicQualificationForm = () => {
@@ -384,7 +382,7 @@ const AcadmicQualificationForm = () => {
       if (formData.isAlCompleted && alCertificateFile) {
         const alCertificateFormData = new FormData();
         alCertificateFormData.append("file", alCertificateFile);
-        const alCertificateResponse = await fetch("http://72.60.42.161/api/upload/al-certificate", {
+        const alCertificateResponse = await fetch("http://localhost:5000/api/upload/al-certificate", {
           method: "POST",
           body: alCertificateFormData,
         });
@@ -398,7 +396,7 @@ const AcadmicQualificationForm = () => {
         if (institute.certificateFile) {
           const higherEducationCertificateFormData = new FormData();
           higherEducationCertificateFormData.append("file", institute.certificateFile);
-          const higherEducationCertificateResponse = await fetch("http://72.60.42.161/api/upload/higher-education-certificate", {
+          const higherEducationCertificateResponse = await fetch("http://localhost:5000/api/upload/higher-education-certificate", {
             method: "POST",
             body: higherEducationCertificateFormData,
           });
@@ -433,7 +431,7 @@ const AcadmicQualificationForm = () => {
       };
   
       console.log("Form Data to Send:", formDataToSend);
-      const response = await fetch("http://72.60.42.161/api/register/academic", {
+      const response = await fetch("http://localhost:5000/api/register/academic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataToSend),

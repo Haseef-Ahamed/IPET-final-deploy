@@ -180,7 +180,7 @@ export const modifyLoginComponent = (LoginComponent) => {
         e.preventDefault();
         
         try {
-          const response = await axios.post("http://72.60.42.161/api/user/login", {
+          const response = await axios.post("http://localhost:5000/api/user/login", {
             membershipNumber: props.membershipNumber,
             password: props.password,
           });

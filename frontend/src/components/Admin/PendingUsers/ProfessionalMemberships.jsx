@@ -1,5 +1,5 @@
- 
- 
+/* eslint-disable no-undef */
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,12 +11,14 @@ const ProfessionalMemberships = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
+
+  // Determine approval status
   const isApproved =
     userData?.admin1status === "approved" && userData?.admin2status === "approved";
   const isRejected =
     userData?.admin1status === "rejected" || userData?.admin2status === "rejected";
 
-  // Handle navigation between tabs
+  // ----- Tab navigation -----
   const handleStepClick = (tabName) => {
     setActiveTab(tabName);
     switch (tabName) {
@@ -37,7 +39,7 @@ const ProfessionalMemberships = () => {
     }
   };
 
-  // Handle certificate download
+  // ----- Certificate download -----
   const handleDownloadCertificate = async (certificatePath) => {
     if (!certificatePath) {
       Swal.fire({
@@ -49,9 +51,7 @@ const ProfessionalMemberships = () => {
     }
 
     try {
-      const response = await axios.get(certificatePath, {
-        responseType: "blob",
-      });
+      const response = await axios.get(certificatePath, { responseType: "blob" });
 
       if (response.data instanceof Blob) {
         const url = window.URL.createObjectURL(response.data);
@@ -63,11 +63,7 @@ const ProfessionalMemberships = () => {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Invalid file format.",
-        });
+        Swal.fire({ icon: "error", title: "Error", text: "Invalid file format." });
       }
     } catch (error) {
       console.error("Error downloading certificate:", error);
@@ -79,14 +75,14 @@ const ProfessionalMemberships = () => {
     }
   };
 
-  // Fetch user details
+  // ----- Fetch user data -----
   useEffect(() => {
     if (userId) {
       const fetchUserDetails = async () => {
         try {
-          console.log("Fetching details for userId:", userId);
-          const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
-          console.log("Fetched user data:", response.data);
+          const response = await axios.get(
+            `http://localhost:5000/api/user-details/${userId}`
+          );
           setUserData(response.data);
         } catch (error) {
           console.error("Error fetching user details:", error);
@@ -101,14 +97,12 @@ const ProfessionalMemberships = () => {
     }
   }, [userId]);
 
-  // Handle navigation to the next step
+  // ----- Next navigation -----
   const handleNext = () => {
-    navigate(`/professional/${userId}`, {
-      state: { userData },
-    });
+    navigate(`/professional/${userId}`, { state: { userData } });
   };
 
-  // Define tabs
+  // ----- Tabs -----
   const tabs = [
     "Personal Information",
     "Academic Qualifications",
@@ -121,7 +115,7 @@ const ProfessionalMemberships = () => {
     <>
       <div className="bg-[#D9D9D9] lg:py-4 py-6 lg:px-6 px-4">
         <div className="max-w-[1360px] mx-auto lg:bg-white lg:px-8 lg:py-6 py-4 rounded-lg">
-          {/* Profile Picture (Mobile: Top Center) */}
+          {/* Mobile Profile Picture */}
           <div className="lg:hidden flex justify-center mb-6">
             <div className="w-[88px] h-[90px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
               {userData?.profile_picture_path ? (
@@ -182,14 +176,14 @@ const ProfessionalMemberships = () => {
             <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2A3990]"></div>
           </div>
 
-          {/* Professional Memberships Content */}
+          {/* Content */}
           <div className="lg:bg-[#EDEDED] lg:p-6 p-4 rounded-lg lg:shadow-sm">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
               <h2 className="text-[18px] sm:text-[20px] font-[700] mb-6 text-[#2A3990]">
                 Professional Memberships
               </h2>
 
-              {/* Memberships List */}
+              {/* Membership List */}
               <div className="mb-8 p-4 sm:p-6 bg-gray-50 rounded-lg border border-gray-200">
                 {userData?.professional_memberships?.length > 0 ? (
                   userData.professional_memberships.map((membership, index) => (
@@ -197,6 +191,7 @@ const ProfessionalMemberships = () => {
                       key={index}
                       className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 last:mb-0 border-b border-gray-200 pb-6 last:pb-0 last:border-b-0"
                     >
+                      {/* Institution */}
                       <div>
                         <h3 className="text-[16px] font-[600] mb-2 text-gray-700">
                           Institution
@@ -205,6 +200,8 @@ const ProfessionalMemberships = () => {
                           {membership.institution || "N/A"}
                         </p>
                       </div>
+
+                      {/* Membership Number */}
                       <div>
                         <h3 className="text-[16px] font-[600] mb-2 text-gray-700">
                           Membership Number
@@ -213,6 +210,8 @@ const ProfessionalMemberships = () => {
                           {membership.membershipNumber || "N/A"}
                         </p>
                       </div>
+
+                      {/* Joined Year */}
                       <div>
                         <h3 className="text-[16px] font-[600] mb-2 text-gray-700">
                           Joined Year
@@ -221,6 +220,8 @@ const ProfessionalMemberships = () => {
                           {membership.joinedYear || "N/A"}
                         </p>
                       </div>
+
+                      {/* Download Certificate – ONLY IF certificatePath exists */}
                       {membership.certificatePath && (
                         <div className="sm:col-span-3">
                           <h3 className="text-[16px] font-[600] mb-2 text-gray-700">
@@ -243,18 +244,20 @@ const ProfessionalMemberships = () => {
                 )}
               </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row">
+              {/* Navigation Buttons – SAME SIZE */}
+              <div className="flex justify-end gap-4 mt-8">
                 <button
                   onClick={() => navigate(`/training/${userId}`)}
-                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+                  className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2A3990] focus:ring-opacity-50"
                 >
                   Back
                 </button>
+
+                {/* Show Next only when not approved/rejected */}
                 {!isApproved && !isRejected && (
                   <button
                     onClick={handleNext}
-                    className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
+                    className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2A3990] focus:ring-opacity-50"
                   >
                     Next
                   </button>

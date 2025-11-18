@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoReload } from "react-icons/io5";
 import Swal from "sweetalert2";
@@ -113,7 +113,7 @@ const TrainingExperience = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://72.60.42.161/api/upload/training-certificate", {
+      const response = await fetch("http://localhost:5000/api/upload/training-certificate", {
         method: "POST",
         body: formData,
       });
@@ -171,7 +171,7 @@ const TrainingExperience = () => {
       );
   
       // Send the payload to the backend
-      const response = await fetch("http://72.60.42.161/api/register/training", {
+      const response = await fetch("http://localhost:5000/api/register/training", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

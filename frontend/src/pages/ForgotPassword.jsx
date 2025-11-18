@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://ipetlogin-mlptt3idt-dineshs-projects-1830e570.vercel.app/api/user/forgot-password", {
+      const response = await axios.post("http://localhost:5000/api/user/forgot-password", {
         email,
       });
 

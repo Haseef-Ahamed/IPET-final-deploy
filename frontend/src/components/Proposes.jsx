@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoReload } from "react-icons/io5";
 import Swal from "sweetalert2";
@@ -94,7 +94,7 @@ const Proposes = () => {
 
       try {
         // Send the file to the backend
-        const response = await fetch("http://72.60.42.161/api/upload/proposer-certificate", {
+        const response = await fetch("http://localhost:5000/api/upload/proposer-certificate", {
           method: "POST",
           body: formData,
         });
@@ -159,7 +159,7 @@ const Proposes = () => {
     };
   
     try {
-      const response = await fetch("http://72.60.42.161/api/register/proposers", {
+      const response = await fetch("http://localhost:5000/api/register/proposers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON

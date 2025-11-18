@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     e.preventDefault();
   
     try {
-      const response = await axios.post("http://72.60.42.161/api/admin/forgot-password", {
+      const response = await axios.post("http://localhost:5000/api/admin/forgot-password", {
         username,
         email,
       });

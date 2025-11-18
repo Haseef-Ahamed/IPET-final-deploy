@@ -10,17 +10,19 @@ const ViewCoursesTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCourses, setFilteredCourses] = useState([]);
 
-  // Fetch all courses from the API
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://72.60.42.161/api/events-courses/course"
+          "http://localhost:5000/api/events-courses/course"
         );
         setCourses(response.data);
-        setFilteredCourses(response.data); // Initialize filtered courses with all courses
+        setFilteredCourses(response.data);
       } catch (error) {
-        console.error("Error fetching courses:", error);
         Swal.fire({
           title: "Error",
           text: "Failed to fetch courses. Please try again later.",
@@ -33,7 +35,7 @@ const ViewCoursesTable = () => {
     fetchCourses();
   }, []);
 
-  // Handle search functionality
+  // Search filter
   useEffect(() => {
     const results = courses.filter(
       (course) =>
@@ -42,9 +44,10 @@ const ViewCoursesTable = () => {
         course.uploaded_date.includes(searchTerm)
     );
     setFilteredCourses(results);
+    setCurrentPage(1); // reset to first page when searching
   }, [searchTerm, courses]);
 
-  // Handle delete course
+  // Handle delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -57,10 +60,8 @@ const ViewCoursesTable = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(
-            `http://72.60.42.161/api/events-courses/${id}`
-          );
-          setCourses(courses.filter((course) => course.id !== id)); // Remove deleted course from state
+          await axios.delete(`http://localhost:5000/api/events-courses/${id}`);
+          setCourses(courses.filter((course) => course.id !== id));
           Swal.fire({
             title: "Deleted!",
             text: "The course has been deleted.",
@@ -68,7 +69,6 @@ const ViewCoursesTable = () => {
             confirmButtonText: "OK",
           });
         } catch (error) {
-          console.error("Error deleting course:", error);
           Swal.fire({
             title: "Error",
             text: "Failed to delete course. Please try again later.",
@@ -80,14 +80,20 @@ const ViewCoursesTable = () => {
     });
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
-    <div className="min-h-screen px-4 py-12 bg-gray-50 sm:px-6 lg:px-8">
+    <div className="min-h-screen px-4 py-12 bg-gray-50 sm:px-6 lg:px-8 mb-20">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-8 text-3xl font-bold text-center text-blue-600">
           View Courses
         </h1>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="mb-6">
           <input
             type="text"
@@ -98,9 +104,9 @@ const ViewCoursesTable = () => {
           />
         </div>
 
-        {/* Desktop View - Table */}
-        <div className="hidden overflow-hidden bg-white rounded-lg shadow-md md:block">
-          <table className="min-w-full">
+        {/* Table */}
+        <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+          <table className="min-w-full table-auto">
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -118,26 +124,21 @@ const ViewCoursesTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredCourses.map((course) => (
+              {currentCourses.map((course) => (
                 <tr key={course.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {course.title}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {course.title}
                   </td>
-                  <td className="px-6 py-4 whitespace-normal">
-                    <div className="text-sm text-gray-900">
-                      {course.description.length > 100
-                        ? `${course.description.substring(0, 100)}...` // Truncate to 100 characters
-                        : course.description}
-                    </div>
+                  <td className="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                    <div
+                      className="line-clamp-3"
+                      dangerouslySetInnerHTML={{ __html: course.description }}
+                    />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {new Date(course.uploaded_date).toLocaleDateString()}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(course.uploaded_date).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     <button
                       onClick={() => navigate(`/update-course/${course.id}`)}
                       className="px-3 py-1 mr-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
@@ -157,48 +158,47 @@ const ViewCoursesTable = () => {
           </table>
         </div>
 
-        {/* Mobile View - Card Layout */}
-        <div className="space-y-4 md:hidden">
-          {filteredCourses.map((course) => (
-            <div
-              key={course.id}
-              className="p-4 bg-white border border-gray-200 rounded-lg shadow-md"
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-6 space-x-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-white bg-blue-500 rounded-md disabled:opacity-50"
             >
-              <div className="mb-3">
-                <h3 className="text-lg font-medium text-gray-900">
-                  {course.title}
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  {new Date(course.uploaded_date).toLocaleDateString()}
-                </p>
-              </div>
-              <p className="mb-4 text-sm text-gray-700">
-                {course.description.length > 100
-                  ? `${course.description.substring(0, 100)}...`
-                  : course.description}
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => navigate(`/update-course/${course.id}`)}
-                  className="flex-1 px-3 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(course.id)}
-                  className="flex-1 px-3 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentPage(idx + 1)}
+                className={`px-3 py-1 rounded-md ${
+                  currentPage === idx + 1
+                    ? "bg-blue-700 text-white"
+                    : "bg-blue-200 text-gray-700"
+                }`}
+              >
+                {idx + 1}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-white bg-blue-500 rounded-md disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
-        {/* No courses found message */}
+        {/* No courses */}
         {filteredCourses.length === 0 && (
-          <div className="p-6 text-center bg-white rounded-lg shadow-md">
-            <p className="text-gray-500">No courses found. Try a different search term.</p>
+          <div className="p-6 text-center bg-white rounded-lg shadow-md mt-4">
+            <p className="text-gray-500">
+              No courses found. Try a different search term.
+            </p>
           </div>
         )}
       </div>

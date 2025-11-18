@@ -41,7 +41,7 @@ const AcadmicQualificationEditForm = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch(`http://72.60.42.161/api/user-details/${userId}`);
+        const response = await fetch(`http://localhost:5000/api/user-details/${userId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch user details.");
         }
@@ -222,9 +222,9 @@ const AcadmicQualificationEditForm = () => {
       try {
         let uploadEndpoint = "";
         if (type === "alCertificate") {
-          uploadEndpoint = "http://72.60.42.161/api/upload/al-certificate";
+          uploadEndpoint = "http://localhost:5000/api/upload/al-certificate";
         } else if (type === "higherEducationCertificate") {
-          uploadEndpoint = "http://72.60.42.161/api/upload/higher-education-certificate";
+          uploadEndpoint = "http://localhost:5000/api/upload/higher-education-certificate";
         }
 
         console.log("Uploading to:", uploadEndpoint, "File:", file.name, "Size:", file.size);
@@ -323,7 +323,7 @@ const AcadmicQualificationEditForm = () => {
       };
 
       // Send the updated data to the backend
-      const response = await fetch("http://72.60.42.161/api/register/academic", {
+      const response = await fetch("http://localhost:5000/api/register/academic", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -665,7 +665,7 @@ const AcadmicQualificationEditForm = () => {
               {formData.al_certificate_path && (
                 <div className="mt-2 text-[14px] text-gray-600">
                   <a
-                    href={`http://72.60.42.161/api/download-al-certificate/${userId}`}
+                    href={`http://localhost:5000/api/download-al-certificate/${userId}`}
                     download={`al_certificate_${userId}.pdf`}
                     className="text-[#2A3990] hover:underline"
                   >
@@ -919,7 +919,7 @@ const AcadmicQualificationEditForm = () => {
                     {institute.certificatePath && (
                       <div className="mt-2 text-[14px] text-gray-600">
                         <a
-                          href={`http://72.60.42.161/api/download-higher-education-certificate/${userId}/${index}`}
+                          href={`http://localhost:5000/api/download-higher-education-certificate/${userId}/${index}`}
                           download={`higher_education_certificate_${userId}_${index}.pdf`}
                           className="text-[#2A3990] hover:underline"
                         >
@@ -958,29 +958,32 @@ const AcadmicQualificationEditForm = () => {
               </button>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row">
-              <button
-                type="button"
-                onClick={() => navigate(`/personal-info/${userId}`)}
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate(`/training-info/${userId}`)}
-                className="w-full sm:w-[160px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors mb-20"
-              >
-                Next
-              </button>
-            </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-end gap-4 mt-6 flex-col sm:flex-row mb-12">
+            <button
+              type="button"
+              onClick={() => navigate(`/personal-info/${userId}`)}
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+            >
+              Back
+            </button>
+
+            <button
+              type="submit"
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#F5B027] text-white hover:bg-[#E4D00A] transition-colors"
+            >
+              Update
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate(`/training-info/${userId}`)}
+              className="w-full sm:w-[160px] h-[48px] px-4 py-2 text-[14px] sm:text-[16px] font-[600] rounded-md bg-[#2A3990] text-white hover:bg-[#1b2142] transition-colors"
+            >
+              Next
+            </button>
+          </div>
+
           </div>
         </form>
       </div>

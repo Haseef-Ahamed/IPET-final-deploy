@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ProfileView from "./ProfileView";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,14 @@ const IPETMIS = () => {
     formState: { errors },
   } = useForm();
 
+  // Set page title to "My Profile"
+  useEffect(() => {
+    document.title = "My Profile";
+  }, []);
+
   const onSubmit = async (formData) => {
     try {
-      const response = await fetch("http://72.60.42.161/api/search-user-by-nic", {
+      const response = await fetch("http://localhost:5000/api/search-user-by-nic", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

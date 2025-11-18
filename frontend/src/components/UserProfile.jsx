@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'; // For making API requests
 
@@ -12,7 +12,7 @@ const UserProfile = ({ userType }) => {
     // Fetch user data based on userId
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://72.60.42.161/api/user-details/${userId}`);
+        const response = await axios.get(`http://localhost:5000/api/user-details/${userId}`);
         setProfileData(response.data);
         setLoading(false);
       } catch (error) {

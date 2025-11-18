@@ -1,5 +1,5 @@
 // EditProfile.jsx
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const EditProfile = () => {

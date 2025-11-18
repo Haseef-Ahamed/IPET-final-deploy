@@ -1,6 +1,6 @@
- 
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 
 const AnnouncementBanner = () => {
   const [mostRecentEvent, setMostRecentEvent] = useState(null);
@@ -12,7 +12,7 @@ const AnnouncementBanner = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "http://72.60.42.161/api/events-courses/event"
+          "http://localhost:5000/api/events-courses/event"
         );
         
         if (!response.ok) {
@@ -98,7 +98,7 @@ export default AnnouncementBanner;
 //       try {
 //         setLoading(true);
 //         const response = await fetch(
-//           "http://72.60.42.161/api/events-courses/event"
+//           "http://localhost:5000/api/events-courses/event"
 //         );
         
 //         if (!response.ok) {

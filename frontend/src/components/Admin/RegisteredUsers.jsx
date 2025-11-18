@@ -14,7 +14,7 @@ const RegisteredUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://72.60.42.161/api/user-details");
+        const response = await fetch("http://localhost:5000/api/user-details");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -89,7 +89,7 @@ const RegisteredUsers = () => {
     }
 
     try {
-      const response = await fetch("http://72.60.42.161/api/assign-membership-number", {
+      const response = await fetch("http://localhost:5000/api/assign-membership-number", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
