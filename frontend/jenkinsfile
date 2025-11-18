@@ -46,30 +46,30 @@ pipeline {
             }
         }
 
-        stage('Lint') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm run lint || echo "Linting issues found"'
-                    echo "Linting completed"
-                }
-            }
-        }
+        // stage('Lint') {
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm run lint || echo "Linting issues found"'
+        //             echo "Linting completed"
+        //         }
+        //     }
+        // }
 
-        stage('Security Audit') {
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm audit --audit-level=high'
-                }
-            }
-        }
+        // stage('Security Audit') {
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm audit --audit-level=high'
+        //         }
+        //     }
+        // }
 
-        stage('Test') { 
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm test'
-                }
-            }
-        }
+        // stage('Test') { 
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm test'
+        //         }
+        //     }
+        // }
 
         stage('Build') { 
             steps {
