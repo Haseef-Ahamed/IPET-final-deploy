@@ -12,7 +12,7 @@ RUN ls -la /app/dist
 
 # Serve static stage
 FROM nginx:1.25-alpine
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+# COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
