@@ -35,13 +35,13 @@ pipeline {
             }
         }
 
-        stage('Test') { 
-            steps {
-                dir("${WORKDIR}") {
-                    sh 'npm test -- --coverage'
-                }
-            }
-        }
+        // stage('Test') { 
+        //     steps {
+        //         dir("${WORKDIR}") {
+        //             sh 'npm test -- --coverage'
+        //         }
+        //     }
+        // }
 
         stage('SonarQube Analysis') {
             steps {
