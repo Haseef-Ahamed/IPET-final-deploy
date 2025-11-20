@@ -35,6 +35,14 @@ pipeline {
             }
         }
 
+        stage('Test') { 
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm test -- --coverage'
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar-scanner') {
@@ -45,6 +53,7 @@ pipeline {
                         -Dsonar.url=http://192.168.56.1:9000 \
                         -Dsonar.login=\${SONAR_TOKEN} \
                         -Dsonar.ProjectName=IPET-Frontend \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                         -Dsonar.nodejs.binary=. \
                         -Dsonar.projectKey=IPET-Frontend '''
                         }
